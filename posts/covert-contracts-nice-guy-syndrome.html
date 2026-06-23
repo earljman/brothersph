@@ -1,0 +1,689 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="On covert contracts, the Nice Guy syndrome, and why real kindness does not send an invoice.">
+  <title>The Nice Guy Pays in Silence — Brothers PH</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500&family=Literata:ital,opsz,wght@0,7..72,400;0,7..72,600;1,7..72,400;1,7..72,500&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --ground: #141210;
+      --ground-elevated: #1c1916;
+      --bone: #f2ede4;
+      --bone-muted: #b9b2a4;
+      --brass: #b8954a;
+      --brass-dim: #7a6232;
+      --rule: rgba(184, 149, 74, 0.22);
+      --grid: rgba(184, 149, 74, 0.06);
+      --margin: clamp(1.5rem, 5vw, 4rem);
+      --measure: 38rem;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; }
+
+    html {
+      font-size: 19px;
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      background: var(--ground);
+      color: var(--bone);
+      font-family: "Literata", Georgia, "Times New Roman", serif;
+      font-weight: 400;
+      font-size: 1rem;
+      line-height: 1.75;
+      letter-spacing: 0.01em;
+      font-optical-sizing: auto;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    /* Baseline grid — faint pulse of measurement */
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(var(--grid) 1px, transparent 1px);
+      background-size: 100% 1.75rem;
+      opacity: 0.55;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .plate {
+      position: relative;
+      z-index: 1;
+      max-width: calc(var(--measure) + var(--margin) * 2);
+      margin: 0 auto;
+      padding: var(--margin);
+    }
+
+    /* Registration marks */
+    .reg {
+      position: fixed;
+      width: 1.25rem;
+      height: 1.25rem;
+      pointer-events: none;
+      z-index: 2;
+      opacity: 0.45;
+    }
+    .reg::before, .reg::after {
+      content: "";
+      position: absolute;
+      background: var(--brass-dim);
+    }
+    .reg--tl { top: var(--margin); left: var(--margin); }
+    .reg--tl::before { top: 0; left: 0; width: 100%; height: 1px; }
+    .reg--tl::after  { top: 0; left: 0; width: 1px; height: 100%; }
+    .reg--tr { top: var(--margin); right: var(--margin); }
+    .reg--tr::before { top: 0; right: 0; width: 100%; height: 1px; }
+    .reg--tr::after  { top: 0; right: 0; width: 1px; height: 100%; }
+    .reg--bl { bottom: var(--margin); left: var(--margin); }
+    .reg--bl::before { bottom: 0; left: 0; width: 100%; height: 1px; }
+    .reg--bl::after  { bottom: 0; left: 0; width: 1px; height: 100%; }
+    .reg--br { bottom: var(--margin); right: var(--margin); }
+    .reg--br::before { bottom: 0; right: 0; width: 100%; height: 1px; }
+    .reg--br::after  { bottom: 0; right: 0; width: 1px; height: 100%; }
+
+    /* Catalogue header */
+    .catalogue {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 1rem 2rem;
+      align-items: end;
+      padding-bottom: 2rem;
+      border-bottom: 1px solid var(--rule);
+      margin-bottom: 3rem;
+    }
+
+    .catalogue__brand {
+      font-family: "Cinzel", serif;
+      font-size: 0.75rem;
+      letter-spacing: 0.22em;
+      color: var(--brass);
+      margin: 0 0 0.5rem;
+    }
+
+    .catalogue__meta {
+      font-family: "IBM Plex Mono", monospace;
+      font-size: 0.7rem;
+      font-weight: 400;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--bone-muted);
+      text-align: right;
+      line-height: 1.8;
+    }
+
+    .catalogue__meta span {
+      display: block;
+    }
+
+    .catalogue__meta .accent {
+      color: var(--brass-dim);
+    }
+
+    /* Title specimen */
+    .specimen {
+      margin-bottom: 3.5rem;
+    }
+
+    .specimen__label {
+      font-family: "IBM Plex Mono", monospace;
+      font-size: 0.7rem;
+      font-weight: 400;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--bone-muted);
+      margin: 0 0 1.25rem;
+    }
+
+    .specimen__label::before {
+      content: "§ ";
+      color: var(--brass-dim);
+    }
+
+    h1 {
+      font-family: "Cinzel", serif;
+      font-size: clamp(1.85rem, 5vw, 2.65rem);
+      font-weight: 500;
+      letter-spacing: 0.03em;
+      line-height: 1.3;
+      margin: 0 0 2rem;
+      color: var(--bone);
+    }
+
+    /* Opening pull — velvet field */
+    .lede {
+      position: relative;
+      padding: 2rem 0 2rem 1.75rem;
+      margin: 0 0 3rem;
+      border-left: 1px solid var(--brass);
+    }
+
+    .lede p {
+      font-size: 1.15rem;
+      font-style: italic;
+      font-weight: 500;
+      line-height: 1.65;
+      margin: 0;
+      color: var(--bone);
+    }
+
+    .lede p + p {
+      margin-top: 1rem;
+      font-size: 1rem;
+      font-weight: 400;
+      color: var(--bone-muted);
+    }
+
+    /* Body prose */
+    .essay p {
+      margin: 0 0 1.35rem;
+      font-size: 1rem;
+    }
+
+    .essay p:last-child {
+      margin-bottom: 0;
+    }
+
+    .essay em {
+      font-style: italic;
+      color: var(--bone);
+    }
+
+    /* Section architecture */
+    .section {
+      margin-top: 3.5rem;
+      padding-top: 2rem;
+      border-top: 1px solid var(--rule);
+    }
+
+    .section__index {
+      font-family: "IBM Plex Mono", monospace;
+      font-size: 0.7rem;
+      font-weight: 400;
+      letter-spacing: 0.06em;
+      color: var(--brass-dim);
+      margin: 0 0 0.75rem;
+    }
+
+    h2 {
+      font-family: "Literata", Georgia, serif;
+      font-size: 1.15rem;
+      font-weight: 600;
+      letter-spacing: 0;
+      text-transform: none;
+      color: var(--brass);
+      margin: 0 0 1.75rem;
+    }
+
+    /* Measured pull quote */
+    .measure {
+      margin: 2.5rem 0;
+      padding: 1.75rem 0;
+      border-top: 1px solid var(--rule);
+      border-bottom: 1px solid var(--rule);
+      text-align: center;
+    }
+
+    .measure blockquote {
+      margin: 0;
+      font-family: "Literata", Georgia, serif;
+      font-size: 1.2rem;
+      font-style: italic;
+      font-weight: 500;
+      line-height: 1.55;
+      color: var(--bone);
+    }
+
+    .measure__rule {
+      display: block;
+      width: 2rem;
+      height: 1px;
+      background: var(--brass);
+      margin: 1rem auto 0;
+    }
+
+    /* Dialogue specimens — ledger entries */
+    .ledger {
+      list-style: none;
+      margin: 1.75rem 0;
+      padding: 0;
+      border: 1px solid var(--rule);
+      background: var(--ground-elevated);
+    }
+
+    .ledger li {
+      font-family: "IBM Plex Mono", monospace;
+      font-size: 0.82rem;
+      font-weight: 400;
+      letter-spacing: 0.01em;
+      padding: 0.85rem 1.25rem;
+      border-bottom: 1px solid var(--rule);
+      color: var(--bone);
+    }
+
+    .ledger li:last-child {
+      border-bottom: none;
+    }
+
+    .ledger li::before {
+      content: "— ";
+      color: var(--brass-dim);
+    }
+
+    /* Closing specimen */
+    .closing {
+      margin-top: 4rem;
+      padding-top: 2.5rem;
+      border-top: 1px solid var(--rule);
+    }
+
+    .closing p {
+      font-size: 1rem;
+      margin-bottom: 1rem;
+    }
+
+    .closing .final {
+      font-family: "Literata", Georgia, serif;
+      font-size: 1.05rem;
+      font-weight: 600;
+      font-style: italic;
+      letter-spacing: 0;
+      color: var(--brass);
+      margin-top: 2rem;
+      margin-bottom: 0;
+    }
+
+    /* Footer lockup */
+    .footer {
+      margin-top: 5rem;
+      padding-top: 2rem;
+      border-top: 1px solid var(--rule);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .footer__mark {
+      font-family: "Cinzel", serif;
+      font-size: 0.7rem;
+      letter-spacing: 0.2em;
+      color: var(--brass-dim);
+    }
+
+    .footer__coords {
+      font-family: "IBM Plex Mono", monospace;
+      font-size: 0.68rem;
+      font-weight: 400;
+      letter-spacing: 0.04em;
+      color: var(--bone-muted);
+      text-transform: uppercase;
+    }
+
+    /* Assay register — catalogue specimens */
+    .register {
+      margin-top: 4.5rem;
+      padding-top: 2.5rem;
+      border-top: 1px solid var(--rule);
+    }
+
+    .register__intro {
+      font-size: 0.92rem;
+      color: var(--bone-muted);
+      margin: 0 0 2rem;
+      max-width: 32rem;
+    }
+
+    .register__disclosure {
+      font-family: "IBM Plex Mono", monospace;
+      font-size: 0.65rem;
+      font-weight: 400;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      color: var(--brass-dim);
+      margin: 0 0 1.75rem;
+    }
+
+    .register__grid {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 0;
+      border: 1px solid var(--rule);
+      background: var(--ground-elevated);
+    }
+
+    .register__item {
+      padding: 1.25rem 1.35rem;
+      border-bottom: 1px solid var(--rule);
+      border-right: 1px solid var(--rule);
+    }
+
+    .register__item:nth-child(2n) {
+      border-right: none;
+    }
+
+    .register__item:nth-last-child(-n+2) {
+      border-bottom: none;
+    }
+
+    .register__item--span {
+      grid-column: 1 / -1;
+      border-right: none;
+      border-bottom: 1px solid var(--rule);
+    }
+
+    .register__item--span:last-child {
+      border-bottom: none;
+    }
+
+    .register__head {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 0.75rem;
+      margin-bottom: 0.55rem;
+    }
+
+    .register__cat {
+      font-family: "IBM Plex Mono", monospace;
+      font-size: 0.65rem;
+      font-weight: 400;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--brass-dim);
+    }
+
+    .register__ref {
+      font-family: "IBM Plex Mono", monospace;
+      font-size: 0.62rem;
+      font-weight: 400;
+      letter-spacing: 0.04em;
+      color: var(--bone-muted);
+      white-space: nowrap;
+    }
+
+    .register__link {
+      font-family: "Literata", Georgia, serif;
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: var(--bone);
+      text-decoration: none;
+      border-bottom: 1px solid transparent;
+      transition: border-color 0.15s ease, color 0.15s ease;
+    }
+
+    .register__link:hover,
+    .register__link:focus-visible {
+      color: var(--brass);
+      border-bottom-color: var(--brass);
+      outline: none;
+    }
+
+    .register__note {
+      font-size: 0.82rem;
+      color: var(--bone-muted);
+      margin: 0.65rem 0 0;
+      line-height: 1.55;
+    }
+
+    .register__shopee {
+      display: inline-block;
+      font-family: "IBM Plex Mono", monospace;
+      font-size: 0.62rem;
+      font-weight: 400;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--brass);
+      margin-top: 0.75rem;
+      text-decoration: none;
+      border-bottom: 1px solid var(--brass-dim);
+      transition: border-color 0.15s ease, color 0.15s ease;
+    }
+
+    .register__shopee:hover,
+    .register__shopee:focus-visible {
+      color: var(--bone);
+      border-bottom-color: var(--brass);
+      outline: none;
+    }
+
+    @media (max-width: 540px) {
+      html { font-size: 18px; }
+      .catalogue { grid-template-columns: 1fr; }
+      .catalogue__meta { text-align: left; }
+      .reg { display: none; }
+      .register__grid { grid-template-columns: 1fr; }
+      .register__item { border-right: none; }
+      .register__item:nth-last-child(-n+2) { border-bottom: 1px solid var(--rule); }
+      .register__item:last-child { border-bottom: none; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="reg reg--tl" aria-hidden="true"></div>
+  <div class="reg reg--tr" aria-hidden="true"></div>
+  <div class="reg reg--bl" aria-hidden="true"></div>
+  <div class="reg reg--br" aria-hidden="true"></div>
+
+  <article class="plate">
+    <header class="catalogue">
+      <div>
+        <p class="catalogue__brand"><a href="../index.html" style="color:inherit;text-decoration:none;">Brothers PH</a></p>
+      </div>
+      <div class="catalogue__meta">
+        <span>Essay <span class="accent">No. 001</span></span>
+        <span>Pillar — Relationships</span>
+        <span>6 min read</span>
+      </div>
+    </header>
+
+    <div class="specimen">
+      <p class="specimen__label">Covert Contracts / Nice Guy Syndrome</p>
+      <h1>The Nice Guy Pays in Silence</h1>
+
+      <div class="lede">
+        <p>There's a kind of man everyone praises and no one chooses.</p>
+        <p>He is <em>mabait</em>. Reliable. He never makes a scene.</p>
+      </div>
+    </div>
+
+    <div class="essay">
+      <p>He remembers your coffee order, drives two hours to help you move, and says <em>"okay lang"</em> when it is plainly not okay. People call him a good man. They mean it as a compliment. He hears it as a verdict.</p>
+
+      <p>And underneath the kindness, a ledger is open.</p>
+
+      <div class="measure" role="presentation">
+        <blockquote>He is keeping score.</blockquote>
+        <span class="measure__rule" aria-hidden="true"></span>
+      </div>
+
+      <section class="section" id="contract">
+        <p class="section__index">I —</p>
+        <h2>The contract no one signed</h2>
+
+        <p>Psychologists call it the covert contract. It works like this: <em>If I am good, I will be rewarded.</em> If I suppress what I want, avoid every conflict, and put everyone first, then love will come. Sex will come. A smooth, problem-free life will come. He never says this out loud. He never asks. He simply gives, and waits for the universe to pay him back.</p>
+
+        <p>The terms are real to him. To everyone else, they don't exist.</p>
+
+        <p>So when the payout doesn't arrive—when the woman he served chooses someone louder, when the boss he covered for promotes someone else—he feels robbed. He did everything right. He held up his end. Where is his end?</p>
+
+        <div class="measure">
+          <blockquote>There was no contract. He was the only signatory.</blockquote>
+          <span class="measure__rule" aria-hidden="true"></span>
+        </div>
+      </section>
+
+      <section class="section" id="world">
+        <p class="section__index">II —</p>
+        <h2>Why the world won't pay</h2>
+
+        <p>The world does not reward submissiveness with romance. It never has.</p>
+
+        <p>We confuse this because we were taught the wrong lesson early. <em>Pakisama.</em> Don't rock the boat. Don't be <em>makasarili</em>. A good son agrees. A good friend absorbs. A good man endures. These are framed as virtues, and sometimes they are. But applied without limit, they become a strategy—a quiet bargain to buy approval by erasing yourself.</p>
+
+        <p>Erasure is not attractive. It is not even visible.</p>
+
+        <p>You cannot want a man you cannot see. And the Nice Guy has spent years making himself unseeable. He hides his preferences to avoid friction. He hides his anger to keep the peace. He hides his desire because desire might be rejected, and rejection is the one thing he cannot survive. So he offers a blank, agreeable surface and calls it love.</p>
+
+        <p>A blank surface inspires nothing. People lean toward conviction. They lean toward a man who knows what he wants and says so.</p>
+      </section>
+
+      <section class="section" id="resentment">
+        <p class="section__index">III —</p>
+        <h2>The resentment goes somewhere</h2>
+
+        <p>Suppressed need does not disappear. It pools.</p>
+
+        <p>It pools quietly for months, for years, and then it finds an exit. Usually a small one. The passive-aggressive text. The favor granted with a sigh. The <em>"wala 'yon"</em> that drips with everything. He becomes a man who helps you and punishes you for needing help, and he cannot understand why people pull away.</p>
+
+        <p>Sometimes the exit is not small. Sometimes the ledger, ignored long enough, detonates. A man who has said <em>"okay lang"</em> a thousand times finally says everything at once, at the worst possible moment, to the wrong person. The outburst shocks everyone. It shocks him most of all. <em>That's not who I am,</em> he thinks.</p>
+
+        <p>It is exactly who he is. It is who he became by refusing to be honest one conversation at a time.</p>
+      </section>
+
+      <section class="section" id="kindness">
+        <p class="section__index">IV —</p>
+        <h2>Kindness without an invoice</h2>
+
+        <p>Here is the turn, and it is harder than it sounds.</p>
+
+        <div class="measure">
+          <blockquote>Real kindness does not bill you.</blockquote>
+          <span class="measure__rule" aria-hidden="true"></span>
+        </div>
+
+        <p>It expects no reciprocal payout. The good man gives because giving is who he chose to be, not because he is buying something he is too afraid to name. The moment a gift carries an invoice, it stops being a gift. It becomes a transaction conducted in the dark, and the other person never even knew they were a customer.</p>
+
+        <p>So the work is not to become cruel. The hard men who confuse coldness with strength are running from the same fear, just in the opposite direction. The work is to become <em>clear</em>.</p>
+
+        <p>Clear means you say what you want. Out loud. Before the resentment forms.</p>
+
+        <ul class="ledger" aria-label="Sentences that dissolve the contract">
+          <li>I'd like to see you again.</li>
+          <li>I need the weekend to myself.</li>
+          <li>No, I can't lend that this month.</li>
+          <li>That hurt me.</li>
+        </ul>
+
+        <p>Each sentence is small. Each one feels, in the moment, like a risk you cannot afford. But every covert contract is just a sentence a man was too afraid to say. Speak it, and the contract dissolves. There is nothing left to enforce in silence.</p>
+
+        <p>You will be told no sometimes. Good. A no you can hear is worth more than a yes you had to manipulate into existence. At least it is true. At least you were there for it, as yourself, instead of behind the mask of the man who never wanted anything.</p>
+      </section>
+
+      <section class="section closing" id="practice">
+        <p class="section__index">V —</p>
+        <h2>Start with one sentence</h2>
+
+        <p>You do not need to confront your whole life this week.</p>
+
+        <p>Find one place where you have been keeping score. One person you have been silently invoicing. Then say the plain thing you have been swallowing. Watch what happens. Notice that the ceiling does not fall. Notice that you are still standing, and that for once, someone is actually responding to <em>you</em>—not to the performance.</p>
+
+        <p>That is the whole practice. Want something. Say it. Let it be received or refused. Repeat.</p>
+
+        <p>The Nice Guy spends his life waiting to be paid for who he pretended to be.</p>
+
+        <p>Be someone real instead. Real men get told no, and survive it, and ask again anyway. That is not the absence of kindness.</p>
+
+        <p class="final">That is the beginning of it.</p>
+      </section>
+
+      <section class="register" id="register" aria-labelledby="register-heading">
+        <p class="section__index">Register —</p>
+        <h2 id="register-heading">Assayed references</h2>
+        <p class="register__intro">Objects and texts that match the work described above. Nothing here is required. Each link opens the product on Shopee.ph in a new tab.</p>
+        <p class="register__disclosure">Affiliate links — Brothers PH may earn a commission on Shopee purchases</p>
+
+        <ol class="register__grid">
+          <li class="register__item">
+            <div class="register__head">
+              <span class="register__cat">Cat. 001 — Text</span>
+              <span class="register__ref">§ I</span>
+            </div>
+            <a class="register__link" href="https://s.shopee.ph/4AxmevIT0C" rel="sponsored noopener noreferrer" target="_blank">No More Mr. Nice Guy</a>
+            <p class="register__note">Dr. Robert Glover. The book that named Nice Guy Syndrome — covert contracts, people-pleasing, passive-aggression, and a step-by-step path to saying what you want without swinging to cruelty.</p>
+            <a class="register__shopee" href="https://s.shopee.ph/4AxmevIT0C" rel="sponsored noopener noreferrer" target="_blank" aria-label="No More Mr. Nice Guy on Shopee">View on Shopee ↗</a>
+          </li>
+          <li class="register__item">
+            <div class="register__head">
+              <span class="register__cat">Cat. 002 — Text</span>
+              <span class="register__ref">§ IV</span>
+            </div>
+            <a class="register__link" href="https://s.shopee.ph/2LW8TahGhU" rel="sponsored noopener noreferrer" target="_blank">Set Boundaries, Find Peace</a>
+            <p class="register__note">Nedra Glover Tawwab. A practical guide to naming your needs, saying no, and setting boundaries — rooted in CBT, written for relationships, work, and family.</p>
+            <a class="register__shopee" href="https://s.shopee.ph/2LW8TahGhU" rel="sponsored noopener noreferrer" target="_blank" aria-label="Set Boundaries, Find Peace on Shopee">View on Shopee ↗</a>
+          </li>
+          <li class="register__item">
+            <div class="register__head">
+              <span class="register__cat">Cat. 003 — Text</span>
+              <span class="register__ref">§ V</span>
+            </div>
+            <a class="register__link" href="https://s.shopee.ph/7fXepRWxV1" rel="sponsored noopener noreferrer" target="_blank">Ryan Holiday Essential Book Collection</a>
+            <p class="register__note">Stoicism, discipline, and growth in one set — typically includes <em>The Obstacle Is the Way</em>, <em>Ego Is the Enemy</em>, <em>Stillness Is the Key</em>, and <em>The Daily Stoic</em>. Check the listing for exact titles and format.</p>
+            <a class="register__shopee" href="https://s.shopee.ph/7fXepRWxV1" rel="sponsored noopener noreferrer" target="_blank" aria-label="Ryan Holiday Essential Book Collection on Shopee">View on Shopee ↗</a>
+          </li>
+          <li class="register__item">
+            <div class="register__head">
+              <span class="register__cat">Cat. 004 — Body</span>
+              <span class="register__ref">§ III</span>
+            </div>
+            <a class="register__link" href="https://s.shopee.ph/4qDTRCuk3p" rel="sponsored noopener noreferrer" target="_blank">Dumbbells</a>
+            <p class="register__note">Home strength-training dumbbells for building a physical outlet when resentment pools. Hex-style pair — check the Shopee listing for available weights and inclusions.</p>
+            <a class="register__shopee" href="https://s.shopee.ph/4qDTRCuk3p" rel="sponsored noopener noreferrer" target="_blank" aria-label="Dumbbells on Shopee">View on Shopee ↗</a>
+          </li>
+          <li class="register__item">
+            <div class="register__head">
+              <span class="register__cat">Cat. 005 — Skin</span>
+              <span class="register__ref">§ II</span>
+            </div>
+            <a class="register__link" href="https://s.shopee.ph/8fQC14mDkG" rel="sponsored noopener noreferrer" target="_blank">NIVEA MEN Face Wash</a>
+            <p class="register__note">Daily oil-control cleanser from the official NIVEA Philippines shop. Removes excess oil and impurities — the first step in a simple regimen, not a performance.</p>
+            <a class="register__shopee" href="https://s.shopee.ph/8fQC14mDkG" rel="sponsored noopener noreferrer" target="_blank" aria-label="NIVEA MEN Face Wash on Shopee">View on Shopee ↗</a>
+          </li>
+          <li class="register__item">
+            <div class="register__head">
+              <span class="register__cat">Cat. 006 — Skin</span>
+              <span class="register__ref">§ II</span>
+            </div>
+            <a class="register__link" href="https://s.shopee.ph/6ff7dK46Ui" rel="sponsored noopener noreferrer" target="_blank">NIVEA MEN Crème</a>
+            <p class="register__note">Fast-absorbing, non-greasy moisturizer for face, body, and hands. Hydrates with a light finish — daily maintenance that says you count too.</p>
+            <a class="register__shopee" href="https://s.shopee.ph/6ff7dK46Ui" rel="sponsored noopener noreferrer" target="_blank" aria-label="NIVEA MEN Crème on Shopee">View on Shopee ↗</a>
+          </li>
+          <li class="register__item register__item--span">
+            <div class="register__head">
+              <span class="register__cat">Cat. 007 — Skin</span>
+              <span class="register__ref">§ II</span>
+            </div>
+            <a class="register__link" href="https://s.shopee.ph/80AVDuIYEL" rel="sponsored noopener noreferrer" target="_blank">NIVEA MEN Body Lotion</a>
+            <p class="register__note">Body lotion for daily moisture — absorbs quickly, keeps skin from drying out. Finish the three-step routine: wash, cream, lotion.</p>
+            <a class="register__shopee" href="https://s.shopee.ph/80AVDuIYEL" rel="sponsored noopener noreferrer" target="_blank" aria-label="NIVEA MEN Body Lotion on Shopee">View on Shopee ↗</a>
+          </li>
+        </ol>
+      </section>
+    </div>
+
+    <footer class="footer">
+      <span class="footer__mark">Brothers PH</span>
+      <span class="footer__coords">Specimen archived — Relationships / Self-worth</span>
+    </footer>
+  </article>
+
+</body>
+</html>
